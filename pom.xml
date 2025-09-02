@@ -49,6 +49,33 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+	
+	
+	  <!-- SOAP / Spring Web Services -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web-services</artifactId>
+  </dependency>
+
+  <!-- JAXB (Java 11+ için) -->
+  <dependency>
+    <groupId>jakarta.xml.bind</groupId>
+    <artifactId>jakarta.xml.bind-api</artifactId>
+    <version>4.0.2</version>
+  </dependency>
+  <dependency>
+    <groupId>org.glassfish.jaxb</groupId>
+    <artifactId>jaxb-runtime</artifactId>
+    <version>4.0.5</version>
+  </dependency>
+  
+    <!-- WSDL oluşturma/güncelleme için gerekli javax.wsdl sınıfları -->
+  <dependency>
+    <groupId>wsdl4j</groupId>
+    <artifactId>wsdl4j</artifactId>
+    <version>1.6.3</version>
+  </dependency>
+  
 	</dependencies>
 
 	<build>
@@ -57,19 +84,28 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-				<!--
-                    If we e.g. execute on JDK 1.7, we should compile for Java 7 to get
-                    the same (or higher) JAXB API version as used during the xjc execution.
-                -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<schemaDirectory>$
-						 </schemaDirectory>
-					</configuration>
-				</plugin>
-
+			<plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>jaxb2-maven-plugin</artifactId>
+	<version>3.1.0</version>
+	<executions>
+		<execution>
+			<id>xjc</id>
+			<goals>
+				<goal>xjc</goal>
+			</goals>
+		</execution>
+	</executions>
+	<configuration>
+		<sources>
+			<source>${project.basedir}/src/main/resources/course-details.xsd</source>
+		</sources>
+		<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+		<clearOutputDir>false</clearOutputDir>
+	</configuration>
+ 
+</plugin>
+			
 		</plugins>
 	</build>
 
